@@ -20,3 +20,7 @@
   - 第 5 章 基础构建模块
 
   ![JCIP5-基础构建模块.excalidraw](Java%20并发编程实战/JCIP5-基础构建模块.excalidraw.png)
+
+  - 第 6 章 任务执行
+
+  ![JCIP6-任务执行.excalidraw](Java%20并发编程实战/JCIP6-任务执行.excalidraw.png)
