@@ -1,12 +1,15 @@
 package wangsc.jcip;
 
-import java.util.concurrent.*;
 
-public class ThreadDeadlock {
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-    static ExecutorService exec = Executors.newSingleThreadExecutor();
+public class ThreadDeadLock2 {
+    ExecutorService exec = Executors.newSingleThreadExecutor();
 
-    public static class LoadFileTask implements Callable<String> {
+    public class LoadFileTask implements Callable<String> {
         private final String fileName;
 
         public LoadFileTask(String fileName) {
@@ -19,31 +22,19 @@ public class ThreadDeadlock {
         }
     }
 
-    public static class RenderPageTask implements Callable<String> {
+    public class RenderPageTask implements Callable<String> {
         public String call() throws Exception {
             Future<String> header, footer;
             header = exec.submit(new LoadFileTask("header.html"));
             footer = exec.submit(new LoadFileTask("footer.html"));
             String page = renderBody();
-            System.out.println("试试");
             // Will deadlock -- task waiting for result of subtask
-            String h = header.get();
-            System.out.println("试试");
-            String f = footer.get();
-            System.out.println("试试");
-            System.out.println(new String(h + page + f));
-            return "1";
+            return header.get() + page + footer.get();
         }
 
         private String renderBody() {
             // Here's where we would actually render the page
             return "";
         }
-    }
-
-    public static void main(String[] args) {
-        RenderPageTask threadDeadlock = new RenderPageTask();
-        FutureTask<String> task = new FutureTask(threadDeadlock);
-        new Thread(task).start();
     }
 }
